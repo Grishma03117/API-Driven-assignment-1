@@ -86,5 +86,5 @@ if __name__ == "__main__":
         parameters={"file_path": file_path}, 
         tags=["MLOps", "Model training"], 
         description="Machine Learning pipeline deployment to run every 2 days at midnight", 
-        #cron="* * */2 * *"
+        cron="* * */2 * *"
     )
