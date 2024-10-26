@@ -1,4 +1,5 @@
 import requests
+from pprint import pprint
 from datetime import datetime
 
 token = "pnu_nExhzoNzfJFWp62c8srJWDr8csqSw61dcnGJ" 
@@ -60,7 +61,7 @@ def display_flow_run_details(flow_run, pipeline_name):
     else:
         print(f"No successful flow runs found for {pipeline_name}.")
 
-def get_100_logs():
+def get_logs(logs_count):
     url = f"{base_url}/logs/filter"
     data = {
         "offset": 0,
@@ -73,12 +74,12 @@ def get_100_logs():
                 ]
             }
         },
-        "limit": 100
+        "limit": logs_count
     }
     response = requests.post(url, headers=headers, json=data)
     flow_runs = response.json()
     if flow_runs:
-        print(flow_runs)
+        pprint(flow_runs)
     else:
         print('no logs found for the given run')
 
@@ -90,7 +91,7 @@ def main():
         print("2. Get MLOps pipeline deployment details")
         print("3. Get DataOps flow details")
         print("4. Get MLOps flow details")
-        print("5. Get 100 logs")
+        print("5. Get logs")
         print("6. Exit")
 
         choice = input("Enter your choice (1-6): ")
@@ -108,7 +109,8 @@ def main():
             flow_run = get_flow(machine_learning_flow_id)
             display_flow_run_details(flow_run, "MLOps")
         elif choice == "5":
-            get_100_logs()
+            logs_count = input('Enter the number of latest logs to fetch: ')
+            get_logs(logs_count)
         elif choice == "6":
             print("Exiting program. Goodbye!")
             break
