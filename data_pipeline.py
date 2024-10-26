@@ -67,7 +67,15 @@ def exploratory_data_analysis(data):
     heatmap_buffer.seek(0)  # Go to the start of the buffer
     heatmap_image = base64.b64encode(heatmap_buffer.getvalue()).decode('utf-8')
     heatmap_markdown = f"![Heatmap](data:image/png;base64,{heatmap_image})"
-
+    
+    # Binning a continuous variable into categories
+    logger.info("Binning the first numeric feature into 'Low', 'Medium', 'High' categories...")
+    numeric_col = numeric_data.columns[0] if not numeric_data.empty else None
+    if numeric_col:
+        data['binned_feature'] = pd.cut(data[numeric_col], bins=3, labels=['Low', 'Medium', 'High'])
+        logger.info(f"Binned feature based on {numeric_col}:")
+        logger.info(data[['binned_feature', numeric_col]].head().to_string())
+        
     # Create and log artifact
     create_markdown_artifact(f"### Heatmap of Correlation Matrix\n\n{heatmap_markdown}")
     logger.info("Heatmap artifact created successfully.")
