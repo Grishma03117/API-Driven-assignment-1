@@ -1,26 +1,16 @@
 import requests
 from pprint import pprint, pformat
 from datetime import datetime
+import credentials
 import logging
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-# Constants
-token = "pnu_nExhzoNzfJFWp62c8srJWDr8csqSw61dcnGJ"
-account_id = "5e8c03a4-2ea0-4759-8183-e587f0dbee28"
-workspace_id = "ec453e67-49ac-47ad-be9e-ea38dad0a9a3"
-base_url = f"https://api.prefect.cloud/api/accounts/{account_id}/workspaces/{workspace_id}"
-data_pipeline_deployment_id = "16527423-18e5-42f8-93e7-4637637387b0"
-ml_pipeline_deployment_id = "3d00768c-5a2e-4206-9e18-bee0e4660a81"
-data_processing_flow_id = "9d8b4ebf-26f1-47d6-8ae8-9da1c281a433"
-machine_learning_flow_id = "3570eaf9-1072-44b0-ad50-5d154775f90a"
-data_processing_flow_run_id = "ce140598-326f-47be-bd4d-d57e9ebc13dc"
-machine_learning_flow_run_id = "19b0b261-3229-4fc7-be36-be6bc62fbb8c"
-
+base_url = f"https://api.prefect.cloud/api/accounts/{credentials.account_id}/workspaces/{credentials.workspace_id}"
 headers = {
-    "Authorization": f"Bearer {token}",
+    "Authorization": f"Bearer {credentials.token}",
     "Content-Type": "application/json"
 }
 
@@ -90,7 +80,9 @@ def get_logs(logs_count):
         "logs": {
             "operator": "and_",
             "flow_run_id": {
-                "any_": [data_processing_flow_run_id, machine_learning_flow_run_id]
+                "any_": [
+                    credentials.data_processing_flow_run_id, credentials.machine_learning_flow_run_id
+                ]
             }
         },
         "limit": logs_count
@@ -121,16 +113,16 @@ def main():
         print("\n" + "#"*100)
 
         if choice == "1":
-            deployment = get_deployment(data_pipeline_deployment_id)
-            display_deployment_info(deployment, "DataOps")
+            deployment = get_deployment(credentials.data_pipeline_deployment_id)
+            display_deployment_info(deployment, 'DataOps')
         elif choice == "2":
-            deployment = get_deployment(ml_pipeline_deployment_id)
-            display_deployment_info(deployment, "MLOps")
+            deployment = get_deployment(credentials.ml_pipeline_deployment_id)
+            display_deployment_info(deployment, 'MLOps')
         elif choice == "3":
-            flow_run = get_flow(data_processing_flow_id)
+            flow_run = get_flow(credentials.data_processing_flow_id)
             display_flow_run_details(flow_run, "DataOps")
         elif choice == "4":
-            flow_run = get_flow(machine_learning_flow_id)
+            flow_run = get_flow(credentials.machine_learning_flow_id)
             display_flow_run_details(flow_run, "MLOps")
         elif choice == "5":
             try:
