@@ -58,7 +58,7 @@ def train_model(X, y):
         logger.info("Splitting data into training and testing sets...")
 
         # Split data
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
         # Initialize and train the Random Forest Classifier
         rf_model = RandomForestClassifier(n_estimators=50, max_depth=25, random_state=42)
